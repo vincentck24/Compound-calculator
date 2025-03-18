@@ -1,411 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Growth Calculator</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        .calculator-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .input-field {
-            flex: 1;
-            min-width: 200px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .results-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 20px;
-        }
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: right;
-        }
-        th {
-            background-color: #f2f2f2;
-            text-align: center;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .contributions-table {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .tab {
-            overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-            border-radius: 4px 4px 0 0;
-        }
-        .tab button {
-            background-color: inherit;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 10px 16px;
-            transition: 0.3s;
-            color: #333;
-        }
-        .tab button:hover {
-            background-color: #ddd;
-        }
-        .tab button.active {
-            background-color: #3498db;
-            color: white;
-        }
-        .tabcontent {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-top: none;
-            border-radius: 0 0 4px 4px;
-            animation: fadeEffect 1s;
-        }
-        @keyframes fadeEffect {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-            margin-left: 5px;
-        }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Online Compound Interest Calculator</title>
+  <!-- Include Chart.js for plotting the graph -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+    h2, h3 {
+      text-align: center;
+    }
+    #calculator, #results {
+      background-color: #fff;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 800px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: inline-block;
+      margin: 5px 0;
+    }
+    input[type="number"], select {
+      padding: 5px;
+      margin-left: 5px;
+      width: 120px;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 10px 0;
+      cursor: pointer;
+      border: none;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #contributionsContainer label {
+      margin-right: 10px;
+    }
+    #finalAmount {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body>
-    <h1>Portfolio Growth Calculator</h1>
-    
-    <div class="calculator-container">
-        <h2>Initial Parameters</h2>
-        <div class="input-group">
-            <div class="input-field">
-                <label for="initialPortfolio">Initial Portfolio Value (€)</label>
-                <input type="number" id="initialPortfolio" value="120000" min="0" step="1000">
-            </div>
-            <div class="input-field">
-                <label for="annualGrowthRate">Annual Growth Rate (%)
-                    <span class="tooltip">ⓘ
-                        <span class="tooltiptext">Expected annual return on your investments before inflation</span>
-                    </span>
-                </label>
-                <input type="number" id="annualGrowthRate" value="7" min="0" max="100" step="0.1">
-            </div>
-            <div class="input-field">
-                <label for="inflationRate">Annual Inflation Rate (%)
-                    <span class="tooltip">ⓘ
-                        <span class="tooltiptext">Expected annual inflation rate</span>
-                    </span>
-                </label>
-                <input type="number" id="inflationRate" value="2" min="0" max="100" step="0.1">
-            </div>
-            <div class="input-field">
-                <label for="compoundingInterval">Compounding Interval
-                    <span class="tooltip">ⓘ
-                        <span class="tooltiptext">How often interest is compounded</span>
-                    </span>
-                </label>
-                <select id="compoundingInterval">
-                    <option value="1">Annually</option>
-                    <option value="2">Semi-annually</option>
-                    <option value="4">Quarterly</option>
-                    <option value="12" selected>Monthly</option>
-                    <option value="365">Daily</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="input-group">
-            <div class="input-field">
-                <label for="initialMonthlyContribution">Initial Monthly Contribution (€)</label>
-                <input type="number" id="initialMonthlyContribution" value="1500" min="0" step="100">
-            </div>
-            <div class="input-field">
-                <label for="durationYears">Investment Duration (Years)</label>
-                <input type="number" id="durationYears" value="40" min="1" max="100" step="1">
-            </div>
-            <div class="input-field">
-                <label for="contributionAdjustmentType">Contribution Adjustment Type</label>
-                <select id="contributionAdjustmentType">
-                    <option value="fixed">Fixed (No Change)</option>
-                    <option value="annual-increase" selected>Annual Fixed Increase</option>
-                    <option value="custom">Custom (Year by Year)</option>
-                </select>
-            </div>
-            <div class="input-field" id="annualIncreaseField">
-                <label for="annualContributionIncrease">Annual Contribution Increase (€)</label>
-                <input type="number" id="annualContributionIncrease" value="300" min="0" step="50">
-            </div>
-        </div>
-        
-        <div id="customContributionsContainer" style="display: none;">
-            <h3>Custom Monthly Contributions</h3>
-            <p>Adjust the monthly contribution for each year:</p>
-            <div class="contributions-table">
-                <table id="contributionsTable">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Monthly Contribution (€)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="contributionsTableBody">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            <button id="resetContributions">Reset to Initial Value</button>
-        </div>
-        
-        <div style="margin-top: 20px;">
-            <button id="calculateButton">Calculate Portfolio Growth</button>
-        </div>
+  <h2>Online Compound Interest Calculator</h2>
+  <div id="calculator">
+    <div>
+      <label>
+        Current Savings ($):
+        <input type="number" id="currentSavings" value="1000" step="any">
+      </label>
     </div>
-    
-    <div class="results-container" id="resultsContainer" style="display: none;">
-        <h2>Results</h2>
-        
-        <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'Summary')">Summary</button>
-            <button class="tablinks" onclick="openTab(event, 'Charts')">Charts</button>
-            <button class="tablinks" onclick="openTab(event, 'DetailedTable')">Detailed Table</button>
-        </div>
-        
-        <div id="Summary" class="tabcontent" style="display: block;">
-            <h3>Portfolio Growth Summary</h3>
-            <div class="input-group">
-                <div class="input-field">
-                    <label>Final Portfolio Value (Nominal)</label>
-                    <input type="text" id="finalPortfolioValue" readonly>
-                </div>
-                <div class="input-field">
-                    <label>Final Portfolio Value (Inflation Adjusted)</label>
-                    <input type="text" id="finalInflationAdjustedValue" readonly>
-                </div>
-            </div>
-            <div class="input-group">
-                <div class="input-field">
-                    <label>Total Contributions</label>
-                    <input type="text" id="totalContributions" readonly>
-                </div>
-                <div class="input-field">
-                    <label>Investment Growth</label>
-                    <input type="text" id="investmentGrowth" readonly>
-                </div>
-            </div>
-            <div class="input-group">
-                <div class="input-field">
-                    <label>Return on Investment</label>
-                    <input type="text" id="returnOnInvestment" readonly>
-                </div>
-                <div class="input-field">
-                    <label>Inflation-Adjusted Return</label>
-                    <input type="text" id="inflationAdjustedReturn" readonly>
-                </div>
-            </div>
-        </div>
-        
-        <div id="Charts" class="tabcontent">
-            <div class="chart-container">
-                <canvas id="portfolioChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <canvas id="contributionsChart"></canvas>
-            </div>
-        </div>
-        
-        <div id="DetailedTable" class="tabcontent">
-            <div class="contributions-table" style="max-height: 500px;">
-                <table id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Age</th>
-                            <th>Monthly Contribution (€)</th>
-                            <th>Annual Contribution (€)</th>
-                            <th>Portfolio Value (€)</th>
-                            <th>Inflation-Adjusted Value (€)</th>
-                            <th>Cumulative Contributions (€)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsTableBody">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div>
+      <label>
+        Annual Interest Rate (%):
+        <input type="number" id="annualRate" value="5" step="any">
+      </label>
     </div>
-    
-    <div class="footer">
-        <p>This calculator is for educational purposes only. Investment returns may vary and are not guaranteed.</p>
+    <div>
+      <label>
+        Annual Inflation Rate (%):
+        <input type="number" id="inflationRate" value="2" step="any">
+      </label>
     </div>
-
-    <script>
-        // Global variables
-        let portfolioChart = null;
-        let contributionsChart = null;
-        let monthlyContributions = [];
-        
-        // Initialize the calculator
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set up event listeners
-            document.getElementById('contributionAdjustmentType').addEventListener('change', updateContributionFields);
-            document.getElementById('calculateButton').addEventListener('click', calculatePortfolioGrowth);
-            document.getElementById('resetContributions').addEventListener('click', resetContributions);
-            document.getElementById('durationYears').addEventListener('change', updateContributionsTable);
-            
-            // Initialize the contributions table
-            updateContributionsTable();
-            
-            // Initialize contribution fields visibility
-            updateContributionFields();
-        });
-        
-        // Update contribution fields based on selected adjustment type
-        function updateContributionFields() {
-            const adjustmentType = document.getElementById('contributionAdjustmentType').value;
-            const annualIncreaseField = document.getElementById('annualIncreaseField');
-            const customContributionsContainer = document.getElementById('customContributionsContainer');
-            
-            if (adjustmentType === 'custom') {
-                annualIncreaseField.style.display = 'none';
-                customContributionsContainer.style.display = 'block';
-                updateContributionsTable();
-            } else if (adjustmentType === 'annual-increase') {
-                annualIncreaseField.style.display = 'block';
-                customContributionsContainer.style.display = 'none';
-            } else { // fixed
-                annualIncreaseField.style.display = 'none';
-                customContributionsContainer.style.display = 'none';
-            }
+    <div>
+      <label>
+        Compounding Frequency:
+        <select id="compoundingFrequency">
+          <option value="1">Annually</option>
+          <option value="2">Semiannually</option>
+          <option value="4">Quarterly</option>
+          <option value="12" selected>Monthly</option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <label>
+        Investment Duration (Years):
+        <input type="number" id="years" value="10" min="1">
+      </label>
+    </div>
+    <div>
+      <button onclick="generateContributionInputs()">Generate Contribution Fields</button>
+    </div>
+    <div id="contributionsContainer">
+      <!-- Contribution input fields will be generated here -->
+    </div>
+    <div>
+      <button onclick="calculateCompound()">Calculate</button>
+    </div>
+  </div>
+  
+  <div id="results">
+    <h3>Results</h3>
+    <p id="finalAmount"></p>
+    <canvas id="resultChart" width="700" height="400"></canvas>
+  </div>
+  
+  <script>
+    // Dynamically generate input fields for monthly contributions for each year.
+    function generateContributionInputs(){
+      const container = document.getElementById("contributionsContainer");
+      container.innerHTML = ""; // clear previous inputs
+      const years = parseInt(document.getElementById("years").value);
+      for (let i = 1; i <= years; i++){
+        // Create a label and input field for each year
+        const label = document.createElement("label");
+        label.innerHTML = "Monthly Contribution for Year " + i + ": ";
+        const input = document.createElement("input");
+        input.type = "number";
+        input.id = "contrib" + i;
+        input.value = "0";
+        input.step = "any";
+        label.appendChild(input);
+        container.appendChild(label);
+        container.appendChild(document.createElement("br"));
+      }
+    }
+    
+    // Calculate the compound interest based on user inputs and simulate month-by-month.
+    function calculateCompound(){
+      // Retrieve user inputs
+      const currentSavings = parseFloat(document.getElementById("currentSavings").value);
+      const annualRate = parseFloat(document.getElementById("annualRate").value) / 100;
+      const inflationRate = parseFloat(document.getElementById("inflationRate").value) / 100;
+      const durationYears = parseInt(document.getElementById("years").value);
+      const compoundingFrequency = parseInt(document.getElementById("compoundingFrequency").value);
+      
+      // Calculate how many months pass between compounding events.
+      const monthsBetweenCompound = 12 / compoundingFrequency;
+      
+      // Build an array of monthly contributions for each year.
+      let contributions = [];
+      for (let i = 1; i <= durationYears; i++){
+        const val = parseFloat(document.getElementById("contrib" + i).value) || 0;
+        contributions.push(val);
+      }
+      
+      // Prepare simulation arrays for the graph.
+      const totalMonths = durationYears * 12;
+      let balance = currentSavings;
+      let nominalData = [];
+      let realData = [];
+      let labels = [];
+      
+      // Run the simulation month by month.
+      // Contributions are added at the beginning of each month,
+      // and if the month qualifies for compounding, interest is applied.
+      for (let m = 1; m <= totalMonths; m++){
+        // Determine current year index (0-indexed)
+        const yearIndex = Math.floor((m - 1) / 12);
+        // Add monthly contribution for the current year.
+        balance += contributions[yearIndex];
+        // Check if the current month is a compounding period.
+        if (m % monthsBetweenCompound === 0) {
+          balance *= (1 + annualRate / compoundingFrequency);
         }
-        
-        // Update the contributions table based on duration
-        function updateContributionsTable() {
-            const durationYears = parseInt(document.getElementById('durationYears').value);
-            const initialContribution = parseFloat(document.getElementById('initialMonthlyContribution').value);
-            const tableBody = document.getElementById('contributionsTableBody');
-            
-            // Clear the table
-            tableBody.innerHTML = '';
-            
-            // Initialize or resize the contributions array
-            if (monthlyContributions.length === 0) {
-                // First time initialization
-                monthlyContributions = Array(durationYears + 1).fill(initialContribution);
-            } else if (monthlyContributions.length < durationYears + 1) {
-                // Duration increased, extend array with initial value
-                const oldLength = monthlyContributions.length;
-                monthlyContributions = monthlyContributions.concat(
-                    Array(durationYears + 1 - oldLength).fill(initialContribution)
-                );
-            } else if (monthlyContributions.length > durationYears + 1) {
-                // Duration decreased, truncate array
-                monthlyContributions = monthlyContributions.slice(0, durationYears + 1);
+        // Record the data for graphing.
+        nominalData.push(balance);
+        // Calculate the inflation-adjusted (real) balance.
+        const realBalance = balance / Math.pow((1 + inflationRate), m / 12);
+        realData.push(realBalance);
+        // Label the x-axis in years (rounded to 2 decimals).
+        labels.push((m / 12).toFixed(2));
+      }
+      
+      // Display final results (both nominal and inflation adjusted).
+      const finalNominal = balance.toFixed(2);
+      const finalReal = (balance / Math.pow((1 + inflationRate), durationYears)).toFixed(2);
+      document.getElementById("finalAmount").innerHTML =
+        "Final Nominal Amount: $" + finalNominal + "<br>" +
+        "Final Inflation-Adjusted Amount: $" + finalReal;
+      
+      // Generate the graph using Chart.js.
+      const ctx = document.getElementById('resultChart').getContext('2d');
+      if(window.myChart instanceof Chart) {
+        window.myChart.destroy();
+      }
+      window.myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Nominal Balance',
+              data: nominalData,
+              borderColor: 'blue',
+              fill: false,
+              tension: 0.1
+            },
+            {
+              label: 'Real Balance',
+              data: realData,
+              borderColor: 'green',
+              fill: false,
+              tension: 0.1
             }
-            
-            // Populate the table
-            for (let year = 1; year <= durationYears; year++) {
-                const row = document.createElement('tr');
-                
-                const yearCell = document.createElement('td');
-                yearCell.textContent = year;
-                row.appendChild(yearCell);
-                
-                const contributionCell = document.createElement('td');
-                const contributionInput = document.createElement('input');
-                contributionInput.type = 'number';
-                contributionInput.min = '0';
-                contributionInput.s<response clipped><NOTE>To save on context only part of this file has been shown to you. You should retry this tool after you have searched inside the file with `grep -n` in order to find the line numbers of what you are looking for.</NOTE>
+          ]
+        },
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Years'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Amount ($)'
+              },
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
